@@ -33,14 +33,13 @@ class UserInput {
 
   getInfo() {
     rl.question(`What was your score for Frame ${this.frame}?\n`, (answer) => {
-      if (answer.includes(",")) {
-        let frame_array = answer.split(",");
-        frame_array.forEach((pinsKnocked) => {
-          this.game.roll(parseInt(pinsKnocked));
-        });
-      } else {
-        this.game.roll(parseInt(answer));
-      }
+      const frame_array = answer.split(",");
+      frame_array.forEach((pinsKnocked) => {
+        if (isNaN(parseInt(pinsKnocked))) {
+          throw new Error('Not a number.')
+        }
+        this.game.roll(parseInt(pinsKnocked));
+      });
       this.frame += 1;
       if (this.frame === 11) {
         this.game.finalScore();
@@ -72,6 +71,6 @@ class UserInput {
 
 //uncomment the 3 lines below this to run
 
-// let game = new BowlingGame();
-// UI = new UserInput(game);
-// UI.run();
+let game = new BowlingGame();
+UI = new UserInput(game);
+UI.run();
